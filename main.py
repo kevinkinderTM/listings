@@ -54,7 +54,7 @@ def multi_generate_content(rows):
 
         # Limit the number of concurrent threads
         while threading.active_count() > max_threads:
-            time.sleep(15) 
+            time.sleep(0.1) 
 
     # Wait for all threads to complete
     for thread in threads:
