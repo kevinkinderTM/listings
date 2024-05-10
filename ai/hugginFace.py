@@ -34,7 +34,7 @@ def generate_content_for_keyword(keyword: str):
             - Haz que el texto sea coherente y fluido, manteniendo un tono consistente en toda la descripción.
             IMPORTANTE: Utiliza solamente h3 y p element tags para "description".
             Sigue la estructura JSON requerida para la respuesta. No respondas con otro texto que no sea el JSON, incluyendo las keys 'meta_description', y 'description'. La descripción debe ser rica en contenido y detallada, aproximándose a las 1000 palabras para cumplir con las expectativas de contenido extenso.
-            - Cuando hayan comillas en el texto, has un escape de las comillas con el caracter escape \ 
+            - Cuando hayan dobles DENTRO del texto, has un escape de las dobles comillas con el caracter escape \. Solamente escapa dobles comillas DENTRO del texto, NO de las comillas que delimitan la string.
             - IMPORTANT! Output must be in valid JSON like the following example {{"description": "{{GENERATED_DESCRIPTION}}", "meta_description": "{{GENERATED_META_DESCRIPTION}}"}}. Output must include only JSON. """
         query_result = chatbot.chat(prompt).wait_until_done()
         text_no_breaks = ''.join(char for char in query_result if char.isprintable())

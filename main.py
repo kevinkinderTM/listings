@@ -42,28 +42,33 @@ def generate_content_and_update(keyword, index):
         print(f"Error updating keyword: {e}")
 
 def multi_generate_content(rows):
-    max_threads = 1
-    results_queue = queue.Queue()
-    threads = []
-    for index, row in rows:
-        rawKeyword = row.iloc[0]
-        keyword = stringProcessing.text_to_keyword(rawKeyword)
-        thread = threading.Thread(target=generate_content_and_update, args=(keyword, index))
-        threads.append(thread)
-        thread.start()
+    try:
+        SAFE_INDEX = 687
+        max_threads = 3
+        results_queue = queue.Queue()
+        threads = []
+        for index, row in rows:
+            rawKeyword = row.iloc[0]
+            keyword = stringProcessing.text_to_keyword(rawKeyword)
+            if index > SAFE_INDEX:
+                thread = threading.Thread(target=generate_content_and_update, args=(keyword, index))
+                threads.append(thread)
+                thread.start()
 
-        # Limit the number of concurrent threads
-        while threading.active_count() > max_threads:
-            time.sleep(0.1) 
+            # Limit the number of concurrent threads
+            while threading.active_count() > max_threads:
+                time.sleep(0.1) 
 
-    # Wait for all threads to complete
-    for thread in threads:
-        thread.join()
+        # Wait for all threads to complete
+        for thread in threads:
+            thread.join()
 
-    # Get results from the queue
-    results = []
-    while not results_queue.empty():
-        results.append(results_queue.get())
+        # Get results from the queue
+        results = []
+        while not results_queue.empty():
+            results.append(results_queue.get())
+    except Exception as e:
+        print(f"MULTI GENERATE err: {e}") 
 
 
 
